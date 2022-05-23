@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./normalize.css">
+    <link rel="stylesheet" href="./index.css">
+    <title>土耳其地名配對遊戲</title>
+</head>
+
+<body>
+    <div id="wrap">
+        <!-- card -->
+        <div id="container">
+            <div id="game">
+                <div id="card-box">
+                    <!-- <div class="card">
+                        <div class="card-front"></div>
+                        <div class="card-back"></div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+        <!-- info -->
+        <div id="info">
+            <div class="col slogan">Turkey</div>
+            <div class="col round"> -round 1-</div>
+            <div class="col score">
+                score: <span id="score">0</span> point<br>
+                <button id="next">Next</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js'
+        integrity='sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=='
+        crossorigin='anonymous'></script>
+    <script>
+        for (let i = 0; i < 8; i++) {
+            $('#card-box').append(
+                `<div class="card">
+                    <div class="card-front"></div>
+                    <div class="card-back"></div>
+                </div>`
+            )
+        }
+
+        // 選照片
+        for (let i = 0; i < 8; i++) {
+            const photo = i % 4 + 1
+            $(".card").eq(2 * i).find('.card-front').css('background-image', `url(./images/card-${photo}a.png)`)
+            $('.card').eq(2 * i).attr('data-card', photo)
+            $(".card").eq(2 * i + 1).find('.card-front').css('background-image', `url(./images/card-${photo}b.png)`)
+            $('.card').eq(2 * i + 1).attr('data-card', photo)
+        }
+
+        // 打散
+        for (let i = 0; i < 8; i++) {
+            const target = Math.round(Math.random() * 7)
+            $('.card').eq(target).insertAfter($('.card').eq(i))
+
+        }
+
+        // 翻牌
+        $('#card-box').on('click', '.card', function () {
+            if ($('.card-open').length < 2 && !$(this).hasClass('card-open')) {
+                $(this).addClass('card-open')
+            }
+
+            // 翻開兩張後開始進行判斷
+            if ($('.card-open').length === 2) {
+                // 兩張配對成功 消失
+                if ($('.card-open').eq(0).attr('data-card') === $('.card-open').eq(1).attr('data-card')) {
+                    $('.card-open').addClass('card-ok')
+                    $('.card-open .card-front').fadeTo(1000, 0)
+                }
+                // 不要同時發生，要完成上一動的一秒後發生
+                setTimeout(function () {
+                    $('.card-open').each(function () {
+                        if ($(this).find('.card-front').css('opacity') !== '1') {
+                            $(this).css('opacity', 0)
+                        }
+                    })
+                    $('.card-open').removeClass('card-open')
+                }, 1000)
+            }
+        })
+
+
+    </script>
+
+</body>
+
+</html>
