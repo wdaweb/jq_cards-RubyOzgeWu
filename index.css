@@ -1,14 +1,3 @@
-/* * {
-    font-family: 'Caesar Dressing', cursive;
-    font-family: 'Fraunces', serif;
-    font-family: 'Homemade Apple', cursive;
-    font-family: 'Metamorphous', cursive;
-    font-family: 'Milonga', cursive;
-    font-family: 'Montaga', serif;
-    font-family: 'Sancreek', cursive;
-    font-family: 'Water Brush', cursive;
-} */
-
 body {
     width: 100%;
     height: 100vh;
@@ -152,6 +141,3 @@ body {
     transform: rotateY(180deg);
 }
 
-/* .card-test{
-    background: red;
-} */
