@@ -1,18 +1,31 @@
-body{
+/* * {
+    font-family: 'Caesar Dressing', cursive;
+    font-family: 'Fraunces', serif;
+    font-family: 'Homemade Apple', cursive;
+    font-family: 'Metamorphous', cursive;
+    font-family: 'Milonga', cursive;
+    font-family: 'Montaga', serif;
+    font-family: 'Sancreek', cursive;
+    font-family: 'Water Brush', cursive;
+} */
+
+body {
     width: 100%;
     height: 100vh;
     background: url(./images/background-3.webp) no-repeat center center/cover;
 }
-#wrap{
+
+#wrap {
     width: 1900px;
     height: 800px;
     /* background: lightblue; */
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
 }
-#container{
+
+#container {
     width: 1200px;
     height: 800px;
     /* border: 1px solid black; */
@@ -22,7 +35,7 @@ body{
     transform: translateY(-50%);
 }
 
-#game{
+#game {
     width: 1200px;
     height: 800px;
     /* background: url(./images/book-1.png) no-repeat center center/contain; */
@@ -30,11 +43,12 @@ body{
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%,-50%);
+    transform: translate(-50%, -50%);
     display: flex;
 }
+
 /* cardbox */
-#card-box{
+#card-box {
     width: 85%;
     height: 90%;
     /* border: 1px solid blue; */
@@ -47,12 +61,12 @@ body{
 
 
 /* info */
-#info{
-    width: 350px;
+#info {
+    width: 400px;
     height: 750px;
-    border: 1px solid black;
+    /* border: 1px solid black; */
     position: absolute;
-    right: 7%;
+    right: 5%;
     top: 50%;
     transform: translateY(-50%);
     display: flex;
@@ -63,16 +77,49 @@ body{
 
 }
 
-/* slogan */
-.col{
-    width: 320px;
+.col {
+    width: 360px;
     height: 200px;
-    border: 1px solid blue;
-    margin-bottom:15px;
+    /* border: 1px solid blue; */
+    margin-bottom: 15px;
 }
 
+.slogan {
+    font-family: 'Water Brush', cursive;
+    font-size: 90px;
+    line-height: 110px;
+    color: rgb(255, 255, 255);
+    text-shadow: 1px 1px 2px black;
+
+}
+
+.round {
+    font-family: 'Caesar Dressing', cursive;
+    font-size: 60px;
+    color: white;
+    line-height: 200px;
+    margin-left:50px;
+}
+
+.btn{
+    width: 200px;
+    height: 100px;
+    font-family: 'Caesar Dressing', cursive;
+    font-size: 60px;
+    color: white;
+    background-color: rgb(176, 97, 44);
+    margin: 5px;
+
+}
+.buttons{
+    display: flex;
+    align-items: center;
+}
+
+
+
 /* card */
-.card{
+.card {
     width: 250px;
     height: 375px;
     /* background: red; */
@@ -83,7 +130,7 @@ body{
     transition: 1s;
 }
 
-.card-front{
+.card-front {
     width: 100%;
     height: 100%;
     background: url(./images/card-1a.png) no-repeat left top/contain;
@@ -93,7 +140,7 @@ body{
 
 }
 
-.card-back{
+.card-back {
     width: 100%;
     height: 100%;
     background: url(/images/card-back-black.png) no-repeat left top/contain;
@@ -101,10 +148,10 @@ body{
     backface-visibility: hidden;
 }
 
-.card-open{
+.card-open {
     transform: rotateY(180deg);
 }
+
 /* .card-test{
     background: red;
 } */
-

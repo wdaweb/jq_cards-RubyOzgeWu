@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+        integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <style>
+        #game {
+            width: 300px;
+        }
+
+        .card {
+            width: 50px;
+            height: 90px;
+            /* 設定子元素在 3D 空間內 */
+            transform-style: preserve-3d;
+            position: relative;
+            /* 翻牌動畫的動畫時間 */
+            transition: transform 0.5s;
+            /* 牌靠左 */
+            float: left;
+            margin: 10px;
+        }
+
+        .card-open {
+            /* 當card onclick的時候 就把這個class加入到card */
+            transform: rotateY(180deg);
+        }
+
+        .card-front {
+            /* 卡背，但沒翻動時，對我們來說是正面 */
+            width: 100%;
+            height: 100%;
+            background-image: url('./images/Red_back.jpg');
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+
+        .card-back {
+            /* 一開始沒有設定background，因為要遊戲開始時隨機匯入圖片，應該是會配合for迴圈+index給圖 */
+            width: 100%;
+            height: 100%;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            position: absolute;
+            transform: rotateY(180deg);
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="game"></div>
+    <script>
+        // 翻牌遊戲會有的動作:
+        // 遊戲產生:game區域、內容物隨機產生卡片(必須有雙面，且有可以比較是否相同的值)
+        // 遊戲內容:onclick翻牌動作(比較第一張翻的，和第二張翻的是否一樣)如果是就.... 如果不是就...
+        // 遊戲結果:消除掉之後，給一個記號，並且把Css樣式取消掉，當所有牌的數量==印記數量的時候就是獲勝。
+
+        $(function () {
+            for (let i = 0; i < 16; i++) {
+                // 接卡片接16次
+                $("#game").append(`
+                <div class="card">
+                    <div class="card-front"></div>
+                    <div class="card-back"></div>
+                </div>
+            `)
+            }
+
+            // 隨機給值階段
+            // i= 0-15
+            for (let i = 0; i < $(".card").length; i++) {
+
+                // add用來給值，範圍是 0%8+1 >>(0~7)+1 就是 1~8
+                let add = i % ($(".card").length / 2) + 1;
+
+                // 第0張卡的背面，給他一張圖片，依照add的值。
+                $(".card").eq(i).find(".card-back").css("background-image", `url('./images/${add}S.jpg')`);
+                // 給他一個屬性data-card，存著add的值，好讓之後翻牌的時候可以比對。
+                // data-* 自訂data屬性
+                $(".card").eq(i).attr("data-card", add);
+
+                // 洗牌
+                // target=0~15
+                // .insertAfter() 把東西放到指定的後面
+                let target = Math.floor(Math.random() * $(".card").length);
+                // 第(0~15)張卡後面隨機放入第(?)張卡
+                $(".card").eq(target).insertAfter($(".card").eq(i));
+            }
+
+            // 遊戲階段
+            // 排雷方法，在上層#game寫
+            // 避免用js產生的內容，沒有註冊到click事件
+            // 這邊的.card是指#game裡面的.card觸發click事件
+            $("#game").on("click", ".card", function () {
+                // 當他不是第二張牌(因.card-open沒兩個)且沒有.card沒有.card-open的class
+                // 我們就新增card-open給card，這時他就會反轉180度。
+                if ($(".card-open").length < 2 && !$(this).hasClass("card-open")) {
+                    $(this).addClass("card-open");
+                }
+                // 如果我們是第二張，先設定過一秒後轉回來(把card-open)消除，在寫後續動作，但其實前後放反也沒差。
+                if ($(".card-open").length === 2) {
+                    // 我們的第一張有.card-open的卡片的值相等於第二張的話
+                    // 一秒後透明度變成0且後面加上card-clear
+                    if ($(".card-open").eq(0).attr("data-card") === $(".card-open").eq(1).attr("data-card")) {
+                        // fade to 不會消失位置
+                        // 將 .card-front 淡出，如果對 .card-open 淡出會把3D壓平只看到卡背
+                        $('.card-open').addClass("card-clear");
+                        $(".card-open .card-back").fadeTo(1000, 0)
+                    }
+                    setTimeout(() => {
+                        $('.card-open').each(function () {
+                            if ($(this).find('.card-back').css('opacity') !== '1') {
+                                $(this).css('opacity', 0)
+                            }
+                        })
+                        $(".card-open").removeClass("card-open");
+                    }, 1000)
+
+                }
+
+                // 半秒過後說贏了
+                if ($(".card-clear").length == $(".card").length) {
+                    setTimeout(() => {
+                        alert("恭喜");
+                    }, 500);
+                }
+
+            })
+        })
+    </script>
+</body>
+
+</html>
